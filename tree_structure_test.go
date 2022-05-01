@@ -19,4 +19,6 @@ func TestMakeTreeStructure(t *testing.T) {
 	ts.DelTreeData([]string{"L_2020050100004"})
 	dataList = ts.GetTreeData()
 	fmt.Println(dataList)
+	proto := ts.GetProto()
+	fmt.Println(proto.String())
 }

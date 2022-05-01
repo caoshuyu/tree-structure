@@ -6,11 +6,11 @@ option go_package = "protofile/tsproto";
 
 // 树结构头
 message TreeHeader {
-  repeated TreeBody Children = 1; // 子结构
+  repeated TB C = 1; // 子结构
 }
 
 // 树结构体
-message TreeBody {
-  string Body = 1; // 值
-  repeated TreeBody Children = 2; // 子结构
+message TB {
+  string B = 1; // 值
+  repeated TB C = 2; // 子结构
 }

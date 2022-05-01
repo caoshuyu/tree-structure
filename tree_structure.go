@@ -23,13 +23,13 @@ func NewTreeStructure(header *tsproto.TreeHeader) *treeStructure {
 // AddTreeData 添加数据
 func (t *treeStructure) AddTreeData(dataList []string) {
 	for _, data := range dataList {
-		t.tsHeader.Children = t.addData(t.tsHeader.Children, []rune(data))
+		t.tsHeader.C = t.addData(t.tsHeader.C, []rune(data))
 	}
 }
 
 // DelTreeData 删除数据
 func (t *treeStructure) DelTreeData(dataList []string) {
-	haveKeyList := t.childData(t.tsHeader.Children)
+	haveKeyList := t.childData(t.tsHeader.C)
 	haveKeyMap := make(map[string]bool)
 	for k := range haveKeyList {
 		haveKeyMap[haveKeyList[k]] = true
@@ -40,16 +40,16 @@ func (t *treeStructure) DelTreeData(dataList []string) {
 		}
 		delete(haveKeyMap, data)
 	}
-	bodyList := make([]*tsproto.TreeBody, 0)
+	bodyList := make([]*tsproto.TB, 0)
 	for key := range haveKeyMap {
 		bodyList = t.addData(bodyList, []rune(key))
 	}
-	t.tsHeader.Children = bodyList
+	t.tsHeader.C = bodyList
 }
 
 // GetTreeData 获取数据
 func (t *treeStructure) GetTreeData() []string {
-	return t.childData(t.tsHeader.Children)
+	return t.childData(t.tsHeader.C)
 }
 
 // GetProto 获取Proto文件
@@ -57,17 +57,17 @@ func (t *treeStructure) GetProto() *tsproto.TreeHeader {
 	return t.tsHeader
 }
 
-func (t *treeStructure) addData(bodyList []*tsproto.TreeBody, dataRune []rune) []*tsproto.TreeBody {
+func (t *treeStructure) addData(bodyList []*tsproto.TB, dataRune []rune) []*tsproto.TB {
 	if len(dataRune) == 0 {
 		return bodyList
 	}
 	isHave := false
 	for k, body := range bodyList {
-		bodyRune := []rune(body.Body)
+		bodyRune := []rune(body.B)
 		if bodyRune[0] == dataRune[0] {
 			isHave = true
 			if len(dataRune) > 0 {
-				bodyList[k].Children = t.addData(bodyList[k].Children, dataRune[1:])
+				bodyList[k].C = t.addData(bodyList[k].C, dataRune[1:])
 			}
 		}
 	}
@@ -77,28 +77,28 @@ func (t *treeStructure) addData(bodyList []*tsproto.TreeBody, dataRune []rune) [
 	return bodyList
 }
 
-func (t *treeStructure) buildDataTree(dataRune []rune) *tsproto.TreeBody {
+func (t *treeStructure) buildDataTree(dataRune []rune) *tsproto.TB {
 	if len(dataRune) == 0 {
 		return nil
 	}
-	body := new(tsproto.TreeBody)
-	body.Body = string(dataRune[0])
+	body := new(tsproto.TB)
+	body.B = string(dataRune[0])
 	if len(dataRune) > 1 {
-		body.Children = append(body.Children, t.buildDataTree(dataRune[1:]))
+		body.C = append(body.C, t.buildDataTree(dataRune[1:]))
 	}
 	return body
 }
 
-func (t *treeStructure) childData(children []*tsproto.TreeBody) []string {
+func (t *treeStructure) childData(children []*tsproto.TB) []string {
 	var dataList []string
 	for _, one := range children {
-		if len(one.Children) > 0 {
-			list := t.childData(one.Children)
+		if len(one.C) > 0 {
+			list := t.childData(one.C)
 			for _, val := range list {
-				dataList = append(dataList, one.Body+val)
+				dataList = append(dataList, one.B+val)
 			}
 		} else {
-			dataList = append(dataList, one.Body)
+			dataList = append(dataList, one.B)
 		}
 	}
 	return dataList
