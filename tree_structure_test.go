@@ -1,4 +1,4 @@
-package tree_structure
+package treestructure
 
 import (
 	"fmt"

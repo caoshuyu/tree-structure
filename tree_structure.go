@@ -1,4 +1,4 @@
-package tree_structure
+package treestructure
 
 import (
 	"github.com/caoshuyu/tree-structure/protofile/tsproto"
@@ -50,6 +50,11 @@ func (t *treeStructure) DelTreeData(dataList []string) {
 // GetTreeData 获取数据
 func (t *treeStructure) GetTreeData() []string {
 	return t.childData(t.tsHeader.Children)
+}
+
+// GetProto 获取Proto文件
+func (t *treeStructure) GetProto() *tsproto.TreeHeader {
+	return t.tsHeader
 }
 
 func (t *treeStructure) addData(bodyList []*tsproto.TreeBody, dataRune []rune) []*tsproto.TreeBody {
